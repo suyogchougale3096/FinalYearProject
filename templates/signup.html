@@ -66,7 +66,8 @@
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12 custom-form">
           <h2 class="text-center mt-4">Sign Up</h2>
-          <form>
+          <form action="" method="post">
+            {% csrf_token %}
             <div class="form-group pb-3">
               <label for="username">Username</label>
               <input
@@ -74,6 +75,8 @@
                 class="form-control"
                 id="username"
                 placeholder="Enter username"
+                name="username"
+                id="username"
               />
             </div>
             <div class="form-group pb-3">
@@ -83,6 +86,8 @@
                 class="form-control"
                 id="email"
                 placeholder="Enter email"
+                name="email1"
+                id="email1"
               />
             </div>
             <div class="form-group pb-3">
@@ -92,6 +97,8 @@
                 class="form-control"
                 id="password"
                 placeholder="Enter password"
+                name="password1"
+                id="password1"
               />
             </div>
             <div class="form-group pb-3">
@@ -101,6 +108,8 @@
                 class="form-control"
                 id="confirm_password"
                 placeholder="Confirm password"
+                name="cpassword1"
+                id="cpassword1"
               />
             </div>
             <div class="">
