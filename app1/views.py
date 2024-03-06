@@ -34,9 +34,13 @@ def signup(request):
         pass1 = request.POST.get('password1')
         pass2 = request.POST.get('cpassword1')
 
-        if pass1 != pass2:
-            return HttpResponse("You have entered wrong data.")
+        user = authenticate(request,username=uname, password=pass1)
+        if(user is None):
+            if(len(pass1) <= 8 or pass1 != pass2 or len(uname) <= 8):
+                return HttpResponse("1. Enter the valid username. Length must be greater than 8.\n2. The password length should be greater than 8. \n3. The entered password and confirmed password should be match.")
+            else:
+                my_user = User.objects.create_user(uname,email1,pass1)
+                return redirect('login')
         else:
-            my_user = User.objects.create_user(uname,email1,pass1)
-            return redirect('login')
+            return HttpResponse('usename is already present try different.')
     return render(request,"signup.html")
