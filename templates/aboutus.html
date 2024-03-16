@@ -1,5 +1,9 @@
 <!-- About Us -->
-<div id="aboutus" class="container-fluid bg-dark text-light pt-5 pb-5">
+<div
+  id="aboutus"
+  class="container-fluid bg-dark text-light pt-5 pb-5"
+  style="display: none"
+>
   <p class="fs-2 text-center">About Us</p>
   <div class="container">
     <div class="row pt-sm-5 mb-4">
@@ -43,3 +47,9 @@
   </div>
 </div>
 <!-- End About Us -->
+
+<script>
+  $(document).ready(function () {
+    $("#aboutus").fadeIn(3000); // Adjust the duration (in milliseconds) as needed
+  });
+</script>

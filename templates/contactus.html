@@ -1,5 +1,5 @@
 <!-- Contact Page starts -->
-<div id="contact" class="container pt-5 pb-5">
+<div id="contact" class="container pt-5 pb-5" style="opacity: 0">
   <div class="row">
     <div class="col">
       <p class="text-light fs-2 text-dark">Contact Us</p>
@@ -36,3 +36,17 @@
   </div>
 </div>
 <!-- Contact page ends -->
+
+<script>
+  $(document).ready(function () {
+    $(window).scroll(function () {
+      var scrollDistance = $(window).scrollTop();
+      var contactOffset = $("#contact").offset().top;
+
+      if (scrollDistance > contactOffset - 500) {
+        // Adjust the offset as needed
+        $("#contact").animate({ opacity: 1 }, 1000); // Adjust the duration as needed
+      }
+    });
+  });
+</script>
