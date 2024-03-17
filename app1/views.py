@@ -2,11 +2,16 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from django.urls import reverse
-from django.contrib import messages
+from django.db import IntegrityError
 
 def warning(request):
     return render(request,"warning.html")
+
+def usernamewarning(request):
+    data = {
+        'message' : 'Username is alredy taken please try different.'
+    }
+    return render(request,"usernamewarning.html",data)
 
 def landingpage(request):
     data = {
@@ -22,13 +27,16 @@ def user_login(request):
         uname = request.POST.get('username')
         pass1 = request.POST.get('password1')
 
-        user = authenticate(request,username=uname, password=pass1)
-        if user is not None:
-            login(request, user)
-            return HttpResponse("valid credentials")
-        else:
-            return HttpResponse("Invalid credentials")
-    return render(request, "login.html")
+        try:
+            user = authenticate(request, username=uname, password=pass1)
+            if user is not None:
+                login(request, user)
+                return HttpResponse("valid credentials")
+            else:
+                return HttpResponse("Invalid credentials")
+        except IntegrityError as e:
+            return HttpResponse(f"IntegrityError occurred: {str(e)}")
+    return render(request,"login.html")
 
 def signup(request):
     if request.method == 'POST':
@@ -37,14 +45,40 @@ def signup(request):
         pass1 = request.POST.get('password1')
         pass2 = request.POST.get('cpassword1')
 
-        user = authenticate(request,username=uname, password=pass1)
-        if(user is None):
-            if(len(pass1) <= 8 or pass1 != pass2 or len(uname) <= 8):
-                return redirect('warning')
-                # return HttpResponse("1. Enter the valid username. Length must be greater than 8.\n2. The password length should be greater than 8. \n3. The entered password and confirmed password should be match.")
+        try:
+            if len(pass1) <= 8 or pass1 != pass2 or len(uname) <= 8:
+                raise ValueError('Invalid input')
+
+            user = User.objects.create_user(uname, email1, pass1)
+            return redirect('login')
+
+        except IntegrityError as e:
+            if 'UNIQUE constraint' in str(e) and 'username' in str(e):
+                return redirect("usernamewarning")
+                # return HttpResponse('Username already exists. Please choose a different username.')
             else:
-                my_user = User.objects.create_user(uname,email1,pass1)
-                return redirect('login')
-        else:
-            return HttpResponse('usename is already present try different.')
-    return render(request,"signup.html")
+                return HttpResponse('An error occurred during sign up.')
+
+        except ValueError as e:
+            return redirect('warning')
+
+    return render(request, "signup.html")
+
+
+    # if request.method == 'POST':
+    #     uname = request.POST.get('username')
+    #     email1 = request.POST.get('email1')
+    #     pass1 = request.POST.get('password1')
+    #     pass2 = request.POST.get('cpassword1')
+
+    #     user = authenticate(request,username=uname, password=pass1)
+    #     if(user is None):
+    #         if(len(pass1) <= 8 or pass1 != pass2 or len(uname) <= 8):
+    #             return redirect('warning')
+    #             # return HttpResponse("1. Enter the valid username. Length must be greater than 8.\n2. The password length should be greater than 8. \n3. The entered password and confirmed password should be match.")
+    #         else:
+    #             my_user = User.objects.create_user(uname,email1,pass1)
+    #             return redirect('login')
+    #     else:
+    #         return HttpResponse('usename is already present try different.')
+    # return render(request,"signup.html")

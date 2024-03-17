@@ -22,5 +22,6 @@ urlpatterns = [
     path('',views.landingpage,name="landingpage"),
     path('login/',views.user_login,name='login'),
     path('signup/',views.signup),
-    path('warning/',views.warning,name="warning")
+    path('warning/',views.warning,name="warning"),
+    path('usernamewarning/',views.usernamewarning,name="usernamewarning")
 ]
