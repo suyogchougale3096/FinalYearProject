@@ -7,14 +7,3 @@
   color: white;
   border-radius: 10px;
 }
-
-.footer {
-  background-color: #333; /* Dark background color */
-  color: #fff; /* Light text color */
-  text-align: center;
-  padding: 10px 0; /* Adjust padding as needed */
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
