@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 
 def warning(request):
@@ -31,12 +31,16 @@ def user_login(request):
             user = authenticate(request, username=uname, password=pass1)
             if user is not None:
                 login(request, user)
-                return HttpResponse("valid credentials")
+                return render(request, "home.html", {'username': uname})
             else:
                 return HttpResponse("Invalid credentials")
         except IntegrityError as e:
             return HttpResponse(f"IntegrityError occurred: {str(e)}")
     return render(request,"login.html")
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
 def signup(request):
     if request.method == 'POST':
@@ -63,6 +67,11 @@ def signup(request):
             return redirect('warning')
 
     return render(request, "signup.html")
+
+
+# This is for home page.
+def home(request):
+    return render(request,"home.html")
 
 
     # if request.method == 'POST':
