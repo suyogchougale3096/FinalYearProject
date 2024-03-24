@@ -3,6 +3,20 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def home(request):
+    return render(request, "home.html", {'username': request.user.username})
+
+@login_required
+def goal(request):
+    return render(request, "goal.html", {'username': request.user.username})
+
+@login_required
+def imp(request):
+    return render(request, "imp.html", {'username': request.user.username})
 
 def warning(request):
     return render(request,"warning.html")
@@ -67,27 +81,3 @@ def signup(request):
             return redirect('warning')
 
     return render(request, "signup.html")
-
-
-# This is for home page.
-def home(request):
-    return render(request,"home.html")
-
-
-    # if request.method == 'POST':
-    #     uname = request.POST.get('username')
-    #     email1 = request.POST.get('email1')
-    #     pass1 = request.POST.get('password1')
-    #     pass2 = request.POST.get('cpassword1')
-
-    #     user = authenticate(request,username=uname, password=pass1)
-    #     if(user is None):
-    #         if(len(pass1) <= 8 or pass1 != pass2 or len(uname) <= 8):
-    #             return redirect('warning')
-    #             # return HttpResponse("1. Enter the valid username. Length must be greater than 8.\n2. The password length should be greater than 8. \n3. The entered password and confirmed password should be match.")
-    #         else:
-    #             my_user = User.objects.create_user(uname,email1,pass1)
-    #             return redirect('login')
-    #     else:
-    #         return HttpResponse('usename is already present try different.')
-    # return render(request,"signup.html")
